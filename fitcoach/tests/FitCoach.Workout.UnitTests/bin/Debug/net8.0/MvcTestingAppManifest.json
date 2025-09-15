@@ -1,0 +1,5 @@
+{
+  "FitCoach.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\GitRepos\\BrettOJGit\\fitcoach-pt-saas-app\\fitcoach\\src\\FitCoach.Common",
+  "FitCoach.Infrastructure.Postgres, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\GitRepos\\BrettOJGit\\fitcoach-pt-saas-app\\fitcoach\\src\\FitCoach.Infrastructure.Postgres",
+  "FitCoach.Workout.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\GitRepos\\BrettOJGit\\fitcoach-pt-saas-app\\fitcoach\\src\\FitCoach.Workout.Api"
+}

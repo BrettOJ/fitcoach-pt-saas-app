@@ -1,0 +1,30 @@
+version: 1
+prompts:
+  dotnet-microservice:
+    prompt: .github/prompts/dotnet-microservice.prompt.md
+    instructions: .github/prompts/dotnet-microservice.instructions.md
+    chatmodes: .github/prompts/chatmodes.md
+    defaultChatMode: agent
+    inputs:
+      solution_dir: ./FitCoach.Workout
+      service_name: workout
+      database_type: postgres
+      include_kafka: true
+
+  helm-chart:
+    prompt: .github/prompts/helm-chart.prompt.md
+    instructions: .github/prompts/shared.instructions.md
+    chatmodes: .github/prompts/chatmodes.md
+    defaultChatMode: concise
+    inputs:
+      chart_name: istio-eastwestgateway
+      namespace: istio-system
+
+  terraform-module:
+    prompt: .github/prompts/terraform-module.prompt.md
+    instructions: .github/prompts/shared.instructions.md
+    chatmodes: .github/prompts/chatmodes.md
+    defaultChatMode: instructor
+    inputs:
+      module_type: avm-res-web-site
+      add_custom_domain: true

@@ -1,0 +1,16 @@
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.csproj.AssemblyReference.cache
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.AssemblyInfoInputs.cache
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.AssemblyInfo.cs
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.csproj.CoreCompileInputs.cache
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.sourcelink.json
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\bin\Debug\net8.0\FitCoach.Infrastructure.Postgres.deps.json
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\bin\Debug\net8.0\FitCoach.Infrastructure.Postgres.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\bin\Debug\net8.0\FitCoach.Infrastructure.Postgres.pdb
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\bin\Debug\net8.0\FitCoach.Common.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\bin\Debug\net8.0\FitCoach.Common.pdb
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.564FD277.Up2Date
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\refint\FitCoach.Infrastructure.Postgres.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\FitCoach.Infrastructure.Postgres.pdb
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Infrastructure.Postgres\obj\Debug\net8.0\ref\FitCoach.Infrastructure.Postgres.dll

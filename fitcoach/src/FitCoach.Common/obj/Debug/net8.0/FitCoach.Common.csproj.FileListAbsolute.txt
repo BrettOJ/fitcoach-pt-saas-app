@@ -1,0 +1,13 @@
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\bin\Debug\net8.0\FitCoach.Common.deps.json
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\bin\Debug\net8.0\FitCoach.Common.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\bin\Debug\net8.0\FitCoach.Common.pdb
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.AssemblyInfoInputs.cache
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.AssemblyInfo.cs
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.csproj.CoreCompileInputs.cache
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.sourcelink.json
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\refint\FitCoach.Common.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.pdb
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\ref\FitCoach.Common.dll
+C:\GitRepos\BrettOJGit\fitcoach-pt-saas-app\fitcoach\src\FitCoach.Common\obj\Debug\net8.0\FitCoach.Common.csproj.AssemblyReference.cache

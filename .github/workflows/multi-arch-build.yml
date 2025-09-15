@@ -1,0 +1,66 @@
+# CI - Multi-arch Docker build & push
+# Builds and pushes multi-arch images for frontend and APIs to Docker Hub.
+
+name: CI - Multi-arch Docker build & push
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      DOCKER_REGISTRY: docker.io
+      IMAGE_NAMESPACE: bojewell
+      TAG: v0.1.4
+
+    strategy:
+      matrix:
+        service:
+          - name: frontend
+            context: fitcoach/frontend
+            dockerfile: Dockerfile
+            image: fitcoach-frontend
+          - name: workout
+            context: fitcoach
+            dockerfile: src/FitCoach.Workout.Api/Dockerfile
+            image: fitcoach-workout
+          - name: usermgmt
+            context: fitcoach
+            dockerfile: src/FitCoach.UserManagement.Api/Dockerfile
+            image: fitcoach-usermgmt
+          - name: progress
+            context: fitcoach
+            dockerfile: src/FitCoach.Progress.Api/Dockerfile
+            image: fitcoach-progress
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.service.context }}
+          file: ${{ matrix.service.dockerfile }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ matrix.service.image }}:${{ env.TAG }}

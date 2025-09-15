@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FitCoach – Personal Training (Single File Demo)</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#121823; --muted:#7b8a9b; --ink:#e8eef7; --accent:#69e6a6; --accent-2:#70b6ff; --danger:#ff7a7a; --warn:#ffd36d;
+      --border: #1f2836; --card:#0f141c; --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:linear-gradient(180deg, #09121d, #0b0f14 20%);} 
+    .container{max-width:1100px;margin:0 auto;padding:28px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    h1{color:var(--ink);font-size:24px;margin:0;letter-spacing:.3px}
+    .badge{font-size:12px;color:#001b0f;background:var(--accent);padding:4px 8px;border-radius:999px;margin-left:10px;font-weight:700}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab-btn{border:1px solid var(--border);background:var(--panel);color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);font-weight:600}
+    .tab-btn[aria-selected="true"], .tab-btn:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(105,230,166,.15)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:960px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+    .card h2{color:var(--ink);font-size:18px;margin:0 0 10px 0}
+    label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+    input,select,textarea{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--border);border-radius:12px;padding:10px 12px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+    .row{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    .col-3{grid-column:span 3}
+    .col-8{grid-column:span 8}
+    .col-12{grid-column:span 12}
+    .btn{background:var(--accent);color:#002d1d;border:0;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer;transition:.2s}
+    .btn.secondary{background:transparent;border:1px solid var(--accent-2);color:var(--ink)}
+    .btn.warn{background:var(--warn);color:#332800}
+    .btn.danger{background:var(--danger);color:#1f0000}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .stack{display:flex;gap:10px;flex-wrap:wrap}
+    .muted{color:var(--muted);font-size:12px}
+    .pill{display:inline-flex;align-items:center;gap:6px;background:#0d1a27;border:1px solid #153149;color:var(--ink);padding:6px 10px;border-radius:999px;font-size:12px}
+    .kpi{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);padding:12px;border-radius:12px;color:var(--ink)}
+    .kpi .val{font-weight:900;font-size:18px}
+    .progress{width:100%;height:10px;background:#0c141f;border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+    .hidden{display:none}
+    .footer{margin-top:18px;color:var(--muted);font-size:12px}
+    .toast{position:fixed;right:18px;bottom:18px;background:#04131a;color:var(--ink);border:1px solid #123746;border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.3s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .plan-day{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+    .plan-day h3{margin:0 0 6px 0;color:var(--ink);font-size:16px}
+    .plan-list{margin:0;padding-left:18px;color:var(--ink)}
+    .tag{font-size:11px;background:#0c1a12;border:1px solid #1a4330;color:#a6ffdb;padding:2px 8px;border-radius:999px}
+    .hr{height:1px;background:var(--border);margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div style="display:flex;align-items:center;gap:10px">
+        <h1>FitCoach <span class="badge">Demo</span></h1>
+        <span class="pill">Single-file · No backend</span>
+      </div>
+      <div class="tabs" role="tablist" aria-label="FitCoach sections">
+        <button class="tab-btn" role="tab" aria-selected="true" data-tab="profile">👤 Profile</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="outputs">📈 Training Outputs</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="plan">🗓️ Plan</button>
+      </div>
+    </header>
+
+    <!-- PROFILE TAB -->
+    <section id="tab-profile" class="tab-panel">
+      <div class="grid">
+        <div class="card">
+          <h2>Personal Details</h2>
+          <div class="row">
+            <div class="col-4">
+              <label>Units</label>
+              <select id="units">
+                <option value="metric">Metric (kg, cm)</option>
+                <option value="imperial">Imperial (lb, ft/in)</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label>Age</label>
+              <input id="age" type="number" min="10" max="100" placeholder="Years" />
+            </div>
+            <div class="col-4">
+              <label>Sex</label>
+              <select id="sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="col-6 metric-only">
+              <label>Height (cm)</label>
+              <input id="height_cm" type="number" min="120" max="230" placeholder="e.g., 178" />
+            </div>
+            <div class="col-6 metric-only">
+              <label>Weight (kg)</label>
+              <input id="weight_kg" type="number" min="35" max="250" placeholder="e.g., 78" />
+            </div>
+            <div class="col-6 imperial-only hidden">
+              <label>Height (ft/in)</label>
+              <div class="stack">
+                <input id="height_ft" type="number" min="3" max="7" placeholder="ft" style="max-width:120px"/>
+                <input id="height_in" type="number" min="0" max="11" placeholder="in" style="max-width:120px"/>
+              </div>
+            </div>
+            <div class="col-6 imperial-only hidden">
+              <label>Weight (lb)</label>
+              <input id="weight_lb" type="number" min="80" max="500" placeholder="e.g., 172" />
+            </div>
+            <div class="col-6">
+              <label>Resting Heart Rate (bpm)</label>
+              <input id="rhr" type="number" min="35" max="120" placeholder="e.g., 60" />
+            </div>
+            <div class="col-6">
+              <label>Experience (months of consistent training)</label>
+              <input id="experience_months" type="number" min="0" max="240" placeholder="e.g., 12" />
+            </div>
+            <div class="col-6">
+              <label>Primary Goal</label>
+              <select id="goal">
+                <option value="general">General Fitness</option>
+                <option value="fatloss">Fat Loss</option>
+                <option value="muscle">Muscle Gain</option>
+                <option value="endurance">Endurance</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label>Days Available / week</label>
+              <input id="days_per_week" type="number" min="2" max="7" value="4" />
+            </div>
+            <div class="col-6">
+              <label>Activity Level (outside training)</label>
+              <select id="activity">
+                <option value="1.2">Sedentary</option>
+                <option value="1.375">Lightly Active</option>
+                <option value="1.55" selected>Moderately Active</option>
+                <option value="1.725">Very Active</option>
+                <option value="1.9">Extra Active</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label>Equipment</label>
+              <select id="equipment">
+                <option value="bodyweight">Bodyweight / Minimal</option>
+                <option value="dumbbells">Dumbbells / Bands</option>
+                <option value="gym">Full Gym</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label>Health Conditions (check all that apply)</label>
+              <div class="stack">
+                <label class="pill"><input type="checkbox" class="hc" value="hypertension"/> Hypertension</label>
+                <label class="pill"><input type="checkbox" class="hc" value="diabetes"/> Diabetes</label>
+                <label class="pill"><input type="checkbox" class="hc" value="joint"/> Joint Pain</label>
+                <label class="pill"><input type="checkbox" class="hc" value="back"/> Back Pain</label>
+                <label class="pill"><input type="checkbox" class="hc" value="asthma"/> Asthma</label>
+                <label class="pill"><input type="checkbox" class="hc" value="pregnancy"/> Pregnancy</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <label>Notes / Injuries</label>
+              <textarea id="notes" rows="3" placeholder="e.g., Left knee discomfort, avoid high-impact jumps"></textarea>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="stack">
+            <button id="saveProfile" class="btn">💾 Save</button>
+            <button id="loadProfile" class="btn secondary">📂 Load</button>
+            <button id="sampleData" class="btn warn">✨ Fill Sample Data</button>
+            <button id="clearAll" class="btn danger">🧹 Clear</button>
+          </div>
+          <p class="footer">We store data locally in your browser (localStorage) for this demo. Nothing is uploaded.</p>
+        </div>
+        <div class="card">
+          <h2>Quick Metrics</h2>
+          <div class="grid">
+            <div class="kpi"><span>BMI</span><span class="val" id="kpi-bmi">–</span></div>
+            <div class="kpi"><span>BMR</span><span class="val" id="kpi-bmr">–</span></div>
+            <div class="kpi"><span>TDEE</span><span class="val" id="kpi-tdee">–</span></div>
+          </div>
+          <p class="muted" style="margin-top:10px">Update your stats to compute BMI (kg/m²), BMR (Mifflin-St Jeor), and daily calories (TDEE).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTPUTS TAB -->
+    <section id="tab-outputs" class="tab-panel hidden">
+      <div class="grid">
+        <div class="card">
+          <h2>Performance Tests</h2>
+          <div class="row">
+            <div class="col-6">
+              <label>5k Time (mm:ss)</label>
+              <input id="t_5k" placeholder="e.g., 25:30" />
+            </div>
+            <div class="col-6">
+              <label>1.5 mile Run (mm:ss)</label>
+              <input id="t_15mi" placeholder="e.g., 12:15" />
+            </div>
+            <div class="col-6">
+              <label>Cooper 12-min Run Distance (m)</label>
+              <input id="cooper_m" type="number" placeholder="e.g., 2400" />
+            </div>
+            <div class="col-6">
+              <label>Push-ups in 1 min</label>
+              <input id="pushups" type="number" placeholder="e.g., 35" />
+            </div>
+            <div class="col-6">
+              <label>Plank Hold (mm:ss)</label>
+              <input id="plank" placeholder="e.g., 1:45" />
+            </div>
+          </div>
+          <div class="row" style="margin-top:6px">
+            <div class="col-4">
+              <label>1RM Squat</label>
+              <input id="rm_squat" type="number" placeholder="kg (auto-convert)" />
+            </div>
+            <div class="col-4">
+              <label>1RM Bench</label>
+              <input id="rm_bench" type="number" placeholder="kg" />
+            </div>
+            <div class="col-4">
+              <label>1RM Deadlift</label>
+              <input id="rm_deadlift" type="number" placeholder="kg" />
+            </div>
+          </div>
+          <div class="hr"></div>
+          <button id="evaluate" class="btn">⚖️ Evaluate Fitness</button>
+        </div>
+        <div class="card">
+          <h2>Evaluation Summary</h2>
+          <div class="kpi"><span>Overall Fitness Score</span><span class="val" id="score-overall">–</span></div>
+          <div style="margin:10px 0" class="progress"><span id="bar-overall"></span></div>
+          <div class="grid">
+            <div>
+              <div class="kpi"><span>Endurance</span><span class="val" id="score-end">–</span></div>
+              <div class="progress" style="margin:8px 0 14px 0"><span id="bar-end"></span></div>
+            </div>
+            <div>
+              <div class="kpi"><span>Strength</span><span class="val" id="score-str">–</span></div>
+              <div class="progress" style="margin:8px 0 14px 0"><span id="bar-str"></span></div>
+            </div>
+          </div>
+          <div>
+            <div class="kpi"><span>Core/Mobility</span><span class="val" id="score-core">–</span></div>
+            <div class="progress" style="margin:8px 0 14px 0"><span id="bar-core"></span></div>
+          </div>
+          <div id="level-pill" class="pill" style="margin-top:6px">Level: –</div>
+          <p class="muted" id="eval-notes" style="margin-top:10px">Enter some outputs and click Evaluate.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAN TAB -->
+    <section id="tab-plan" class="tab-panel hidden">
+      <div class="grid">
+        <div class="card">
+          <h2>Personalized Plan</h2>
+          <div class="stack" style="margin-bottom:10px">
+            <button id="genPlan" class="btn">🛠️ Generate Plan</button>
+            <button id="exportPlan" class="btn secondary">⬇️ Export</button>
+            <button id="printPlan" class="btn secondary">🖨️ Print</button>
+          </div>
+          <div id="planWrap" class="grid"></div>
+        </div>
+        <div class="card">
+          <h2>Nutrition Targets</h2>
+          <div class="grid">
+            <div class="kpi"><span>Calories</span><span class="val" id="kcal">–</span></div>
+            <div class="kpi"><span>Protein</span><span class="val" id="protein">–</span></div>
+            <div class="kpi"><span>Carbs</span><span class="val" id="carbs">–</span></div>
+            <div class="kpi"><span>Fat</span><span class="val" id="fats">–</span></div>
+          </div>
+          <p class="muted" style="margin-top:10px">Protein target scales with goal (approx 1.6–2.2 g/kg). Adjust based on preference and tolerance.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer">⚠️ This demo provides generalized guidance and is not medical advice. Consult a professional before starting a new program.</p>
+  </div>
+
+  <div id="toast" class="toast">Saved ✔️</div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    function showToast(msg){
+      const t = $('#toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 1800);
+    }
+
+    function parseTimeMMSS(v){
+      if(!v) return null; // seconds
+      const parts = v.split(':').map(x=>x.trim());
+      if(parts.length===1){
+        const s = Number(parts[0]);
+        return isFinite(s)? s : null;
+      }
+      const m = Number(parts[0]);
+      const s = Number(parts[1]);
+      if(!isFinite(m)||!isFinite(s)) return null;
+      return m*60 + s;
+    }
+
+    function secondsToMMSS(sec){
+      const m = Math.floor(sec/60); const s = Math.round(sec%60);
+      return `${m}:${String(s).padStart(2,'0')}`;
+    }
+
+    function clamp(x, a=0, b=100){ return Math.max(a, Math.min(b, x)); }
+
+    function kgFromLb(lb){ return lb/2.2046226218; }
+    function cmFromFtIn(ft, inch){ return ft*30.48 + inch*2.54; }
+
+    function getProfile(){
+      const units = $('#units').value;
+      let height_cm, weight_kg;
+      if(units==='metric'){
+        height_cm = Number($('#height_cm').value);
+        weight_kg = Number($('#weight_kg').value);
+      }else{
+        const ft = Number($('#height_ft').value||0);
+        const inch = Number($('#height_in').value||0);
+        height_cm = cmFromFtIn(ft, inch);
+        weight_kg = kgFromLb(Number($('#weight_lb').value||0));
+      }
+      const profile = {
+        units,
+        age: Number($('#age').value||0),
+        sex: $('#sex').value,
+        height_cm: isFinite(height_cm)? height_cm : 0,
+        weight_kg: isFinite(weight_kg)? weight_kg : 0,
+        rhr: Number($('#rhr').value||0),
+        experience_months: Number($('#experience_months').value||0),
+        goal: $('#goal').value,
+        days_per_week: Number($('#days_per_week').value||4),
+        activity: Number($('#activity').value||1.55),
+        equipment: $('#equipment').value,
+        health: $$('.hc:checked').map(c=>c.value),
+        notes: $('#notes').value.trim(),
+      };
+      return profile;
+    }
+
+    function setProfile(p){
+      if(!p) return;
+      $('#units').value = p.units||'metric';
+      $('#age').value = p.age||'';
+      $('#sex').value = p.sex||'male';
+      if((p.units||'metric')==='metric'){
+        $('#height_cm').value = p.height_cm||'';
+        $('#weight_kg').value = p.weight_kg||'';
+      }else{
+        // convert for display
+        const totalIn = (p.height_cm||0)/2.54; const ft = Math.floor(totalIn/12); const inch = Math.round(totalIn - ft*12);
+        $('#height_ft').value = ft||''; $('#height_in').value = inch||'';
+        $('#weight_lb').value = Math.round((p.weight_kg||0)*2.20462)||'';
+      }
+      $('#rhr').value = p.rhr||'';
+      $('#experience_months').value = p.experience_months||'';
+      $('#goal').value = p.goal||'general';
+      $('#days_per_week').value = p.days_per_week||4;
+      $('#activity').value = p.activity||1.55;
+      $('#equipment').value = p.equipment||'bodyweight';
+      $$('.hc').forEach(c=>c.checked = p.health?.includes(c.value));
+      $('#notes').value = p.notes||'';
+      updateUnitsUI();
+      computeKpis();
+    }
+
+    function saveProfile(){
+      localStorage.setItem('fitcoach_profile', JSON.stringify(getProfile()));
+      showToast('Profile saved');
+      computeKpis();
+    }
+    function loadProfile(){
+      const p = localStorage.getItem('fitcoach_profile');
+      if(p){ setProfile(JSON.parse(p)); showToast('Profile loaded'); }
+    }
+
+    function clearAll(){
+      localStorage.removeItem('fitcoach_profile');
+      $$('input, textarea').forEach(el=>{ if(el.type==='checkbox'){ el.checked=false;} else { el.value=''; } });
+      $('#units').value='metric'; $('#activity').value='1.55'; $('#goal').value='general'; $('#equipment').value='bodyweight'; $('#days_per_week').value='4';
+      updateUnitsUI(); computeKpis();
+      showToast('Cleared');
+    }
+
+    function sampleData(){
+      const demo = {units:'metric', age:35, sex:'male', height_cm:178, weight_kg:78, rhr:58, experience_months:18, goal:'general', days_per_week:4, activity:1.55, equipment:'dumbbells', health:['joint'], notes:'Left knee: prefer cycling to running.'};
+      setProfile(demo);
+      // Fill outputs demo too
+      $('#t_5k').value = '24:30';
+      $('#t_15mi').value = '12:10';
+      $('#cooper_m').value = '2300';
+      $('#pushups').value = '32';
+      $('#plank').value = '2:00';
+      $('#rm_squat').value = '110';
+      $('#rm_bench').value = '85';
+      $('#rm_deadlift').value = '140';
+      showToast('Sample data filled');
+      computeKpis();
+    }
+
+    // ---------- Calculations ----------
+    function computeBMI(kg, cm){ if(!kg||!cm) return null; return kg / Math.pow(cm/100,2); }
+    function bmiCategory(bmi){
+      if(bmi==null) return '–';
+      if(bmi<18.5) return 'Underweight';
+      if(bmi<25) return 'Normal';
+      if(bmi<30) return 'Overweight';
+      return 'Obese';
+    }
+
+    function computeBMR(kg, cm, age, sex){
+      if(!kg||!cm||!age||!sex) return null;
+      const s = (sex==='male')?5:-161; // Mifflin St Jeor
+      return 10*kg + 6.25*cm - 5*age + s;
+    }
+
+    function computeTDEE(bmr, activity){ if(!bmr||!activity) return null; return bmr * activity; }
+
+    function computeVO2from15mi(sec){ if(!sec) return null; const min = sec/60; return 3.5 + (483 / min); }
+    function computeVO2fromCooper(m){ if(!m) return null; return (m - 504.9)/44.73; }
+
+    function enduranceScore({sec5k, sec15, cooper_m}){
+      let vo2=null;
+      if(sec15){ vo2 = computeVO2from15mi(sec15); }
+      else if(cooper_m){ vo2 = computeVO2fromCooper(cooper_m); }
+      else if(sec5k){ // rough mapping via min/km pace
+        const pace = sec5k/1000; // sec per meter
+        const min_per_km = (pace*1000)/60;
+        // Map 8:00 min/km -> 10 score, 4:00 min/km -> 90 score
+        const s = 100 - ((min_per_km - 4) * 100 / (8-4));
+        return clamp(s, 0, 100);
+      }
+      if(!vo2) return null;
+      // Map VO2max 25 -> 10 score, 60 -> 95 score
+      return clamp(((vo2 - 25) * 85 / (60-25)) + 10, 0, 100);
+    }
+
+    function strengthScore({kg, pushups, rm:{sq,be,dl}}){
+      const bw = kg||0; let scores=[];
+      if(sq&&bw) scores.push(clamp((sq/bw) / 1.5 * 100));
+      if(be&&bw) scores.push(clamp((be/bw) / 1.2 * 100));
+      if(dl&&bw) scores.push(clamp((dl/bw) / 1.8 * 100));
+      if(pushups){ scores.push(clamp((pushups/50)*100)); }
+      if(!scores.length) return null;
+      return clamp(scores.reduce((a,b)=>a+b,0)/scores.length,0,100);
+    }
+
+    function coreScore({plankSec}){ if(!plankSec) return null; return clamp((plankSec/180)*100); }
+
+    function determineLevel(score, expMonths){
+      if(score==null) return '–';
+      // Adjust with experience
+      const adj = score + Math.min(expMonths||0, 24) * 0.5; // up to +12
+      if(adj<40) return 'Beginner';
+      if(adj<70) return 'Intermediate';
+      return 'Advanced';
+    }
+
+    function computeKpis(){
+      const p = getProfile();
+      const bmi = computeBMI(p.weight_kg, p.height_cm);
+      const bmr = computeBMR(p.weight_kg, p.height_cm, p.age, p.sex);
+      const tdee = computeTDEE(bmr, p.activity);
+      $('#kpi-bmi').textContent = bmi? `${bmi.toFixed(1)} (${bmiCategory(bmi)})` : '–';
+      $('#kpi-bmr').textContent = bmr? `${Math.round(bmr)} kcal` : '–';
+      $('#kpi-tdee').textContent = tdee? `${Math.round(tdee)} kcal` : '–';
+    }
+
+    // ---------- Evaluation ----------
+    function evaluate(){
+      const p = getProfile();
+      const sec5k = parseTimeMMSS($('#t_5k').value);
+      const sec15 = parseTimeMMSS($('#t_15mi').value);
+      const cooper_m = Number($('#cooper_m').value||0);
+      const pushups = Number($('#pushups').value||0);
+      const plankSec = parseTimeMMSS($('#plank').value);
+      const rm = { sq:Number($('#rm_squat').value||0), be:Number($('#rm_bench').value||0), dl:Number($('#rm_deadlift').value||0) };
+
+      const e = enduranceScore({sec5k, sec15, cooper_m});
+      const s = strengthScore({kg:p.weight_kg, pushups, rm});
+      const c = coreScore({plankSec});
+
+      let weights = {e:0.4, s:0.4, c:0.2};
+      const parts = [];
+      if(e==null){ weights = {e:0, s:0.6, c:0.4}; parts.push('No endurance test; weighing strength & core more.'); }
+      if(s==null){ weights = {e:0.6, s:0, c:0.4}; parts.push('No strength tests; weighing endurance & core more.'); }
+      if(e==null && s==null){ weights = {e:0, s:0, c:1}; parts.push('Only core available; overall reflects core/mobility.'); }
+
+      const total = ( (e||0)*weights.e + (s||0)*weights.s + (c||0)*weights.c ) / (weights.e+weights.s+weights.c || 1);
+      const level = determineLevel(total, p.experience_months);
+
+      // Update UI
+      $('#score-end').textContent = e==null? '–' : Math.round(e);
+      $('#score-str').textContent = s==null? '–' : Math.round(s);
+      $('#score-core').textContent = c==null? '–' : Math.round(c);
+      $('#score-overall').textContent = isNaN(total)? '–' : Math.round(total);
+
+      $('#bar-end').style.width = `${Math.round(e||0)}%`;
+      $('#bar-str').style.width = `${Math.round(s||0)}%`;
+      $('#bar-core').style.width = `${Math.round(c||0)}%`;
+      $('#bar-overall').style.width = `${Math.round(total||0)}%`;
+
+      $('#level-pill').textContent = `Level: ${level}`;
+      $('#eval-notes').textContent = parts.length? parts.join(' ') : 'Balanced evaluation from endurance, strength, and core tests.';
+
+      // Store last eval in memory for plan
+      window._lastEval = {score: total||0, level, parts, details:{e,s,c,sec5k,sec15,cooper_m,pushups,plankSec,rm}};
+      showToast('Evaluation updated');
+    }
+
+    // ---------- Plan Generation ----------
+    function macroTargets(goal, tdee, kg){
+      if(!tdee||!kg) return {kcal:null, protein:null, carbs:null, fat:null};
+      let kcal=tdee, p=1.6; // g/kg
+      if(goal==='fatloss'){ kcal = tdee*0.8; p = 1.8; }
+      if(goal==='muscle'){ kcal = tdee*1.1; p = 2.0; }
+      if(goal==='endurance'){ kcal = tdee*1.0; p = 1.6; }
+      const protein = Math.round(p*kg);
+      // Simple macro split: 30/40/30 (P/C/F) for general; for endurance 25/55/20; for muscle 30/45/25; for fatloss 35/35/30
+      let split = {p:0.30,c:0.40,f:0.30};
+      if(goal==='endurance') split={p:0.25,c:0.55,f:0.20};
+      if(goal==='muscle') split={p:0.30,c:0.45,f:0.25};
+      if(goal==='fatloss') split={p:0.35,c:0.35,f:0.30};
+      const grams = {
+        protein,
+        carbs: Math.round((kcal*split.c)/4),
+        fat: Math.round((kcal*split.f)/9)
+      };
+      return {kcal:Math.round(kcal), protein:grams.protein, carbs:grams.carbs, fat:grams.fat};
+    }
+
+    function adjustForHealth(lines, health){
+      if(health.includes('hypertension')){
+        lines.push('• Hypertension: prefer moderate steady cardio, avoid breath-holding on heavy lifts, keep sets at RPE 6–7.');
+      }
+      if(health.includes('joint')){
+        lines.push('• Joint pain: swap running for cycling/elliptical; reduce plyometrics; favor tempo and controlled eccentrics.');
+      }
+      if(health.includes('back')){
+        lines.push('• Back pain: emphasize core bracing, neutral spine; substitute trap bar or split squats for heavy back squats/deads.');
+      }
+      if(health.includes('asthma')){
+        lines.push('• Asthma: extended warm-ups; prefer interval build-ups; keep rescue inhaler accessible.');
+      }
+      if(health.includes('pregnancy')){
+        lines.push('• Pregnancy: seek medical clearance; avoid supine work late in pregnancy; prioritize low-impact and RPE-based scaling.');
+      }
+    }
+
+    function buildWorkoutBlocks(goal, level, equipment){
+      const strLight = equipment==='bodyweight';
+      const dbOnly = equipment==='dumbbells';
+      const L = (t)=>({type:'Lift', text:t});
+      const C = (t)=>({type:'Cardio', text:t});
+      const M = (t)=>({type:'Mobility', text:t});
+
+      const strength = () => {
+        if(strLight) return [
+          L('Full-body: 4x8 Squats (air/goblet), 4x8 Push-ups (incline if needed), 3x10 Hip Hinge (RDL pattern), 3x30s Side Planks'),
+          L('Full-body: 4x10 Split Squats, 3x8 Pike/Wall Push-up, 3x12 Hip Bridge, 3x12 Rows (band/DB), 3x12 Calf Raises')
+        ];
+        if(dbOnly) return [
+          L('Upper: 4x8 DB Bench, 4x10 DB Row, 3x10 DB Shoulder Press, 3x12 Lat Pulldown/Band Pulldown, 3x12 Curl/Triceps superset'),
+          L('Lower: 4x8 Goblet Squat, 4x8 DB RDL, 3x12 Walking Lunge, 3x15 Calf Raise, Core: 3x30–45s Planks')
+        ];
+        return [
+          L('Upper: 4x6–8 Bench Press, 4x6–8 Row, 3x8–10 OHP, 3x8 Lat Pulldown, Core: 3x10–12 Hanging Knee Raise'),
+          L('Lower: 5x5 Back Squat, 4x5 Deadlift (moderate), 3x10 Split Squat, 3x12 Hamstring Curl, 3x15 Calf Raise')
+        ];
+      };
+
+      const cardio = (intensity='mod') => {
+        if(intensity==='easy') return [C('30–40 min easy Zone 2: brisk walk, cycle, or swim.')];
+        if(intensity==='hiit') return [C('20–25 min intervals: 1:00 hard / 2:00 easy × 8–10 (bike/rower/run).')];
+        return [C('35–50 min steady Zone 2–3 cardio (cycle preferred if joint issues).')];
+      };
+
+      const mobility = () => [M('15–25 min: hips/ankles/ thoracic spine + 8–10 min core (dead bug, bird-dog, side plank).')];
+
+      // Level-based tweaks (simple messaging, prescriptions inside details)
+      const tag = level;
+      return { strength: strength(), cardio, mobility, tag };
+    }
+
+    function generatePlan(){
+      const p = getProfile();
+      const evalRes = window._lastEval || {score:0, level:'Beginner'};
+      const days = clamp(Number(p.days_per_week)||4,2,7);
+      const {strength, cardio, mobility, tag} = buildWorkoutBlocks(p.goal, evalRes.level, p.equipment);
+
+      // Distribute sessions by goal
+      let dist;
+      if(p.goal==='fatloss') dist = {str: Math.min(3,days-1), car: Math.max(2, days-3), mob: days - (Math.min(3,days-1)+Math.max(2, days-3))};
+      else if(p.goal==='muscle') dist = {str: Math.max(3, days-2), car: Math.max(1, days-4), mob: days - (Math.max(3, days-2)+Math.max(1, days-4))};
+      else if(p.goal==='endurance') dist = {str: Math.max(2, days-3), car: Math.max(3, days-2), mob: days - (Math.max(2, days-3)+Math.max(3, days-2))};
+      else dist = {str: Math.max(2, days-3), car: Math.max(2, days-3), mob: days - (Math.max(2, days-3)+Math.max(2, days-3))};
+
+      const plan=[];
+      let sIdx=0;
+      for(let d=1; d<=days; d++){
+        let day={title:`Day ${d}`, items:[], tags:[]};
+        if(dist.str>0){
+          day.items.push(strength[sIdx%strength.length]); sIdx++; dist.str--; day.tags.push('Strength');
+        } else if(dist.car>0){
+          // Choose intensity by evaluation score
+          const intensity = evalRes.score>70? 'hiit' : (evalRes.score>40? 'mod' : 'easy');
+          day.items.push(...cardio(intensity)); dist.car--; day.tags.push('Cardio');
+        } else {
+          day.items.push(...mobility()); dist.mob--; day.tags.push('Mobility');
+        }
+        plan.push(day);
+      }
+
+      const planWrap = $('#planWrap');
+      planWrap.innerHTML='';
+      plan.forEach(d=>{
+        const div = document.createElement('div');
+        div.className='plan-day';
+        div.innerHTML = `<h3>${d.title} <span class="tag">${d.tags.join(' · ')}</span></h3>`+
+                         `<ul class="plan-list">${d.items.map(it=>`<li>${it.text}</li>`).join('')}</ul>`;
+        planWrap.appendChild(div);
+      });
+
+      // Nutrition
+      const bmr = computeBMR(p.weight_kg, p.height_cm, p.age, p.sex);
+      const tdee = computeTDEE(bmr, p.activity);
+      const macros = macroTargets(p.goal, tdee, p.weight_kg);
+      $('#kcal').textContent = macros.kcal? `${macros.kcal} kcal/day` : '–';
+      $('#protein').textContent = macros.protein? `${macros.protein} g` : '–';
+      $('#carbs').textContent = macros.carbs? `${macros.carbs} g` : '–';
+      $('#fats').textContent = macros.fat? `${macros.fat} g` : '–';
+
+      // Health adjustments note
+      const notes=[]; adjustForHealth(notes, p.health);
+      if(notes.length){
+        const warn = document.createElement('div');
+        warn.className='muted';
+        warn.style.marginTop='8px';
+        warn.innerHTML = `<strong>Health Adjustments:</strong><br>${notes.join('<br>')}`;
+        planWrap.appendChild(warn);
+      }
+
+      // Save for export
+      window._lastPlan = {plan, macros, profile:p, eval:evalRes};
+      showToast('Plan generated');
+    }
+
+    function exportPlan(){
+      const data = window._lastPlan;
+      if(!data){ showToast('Generate a plan first'); return; }
+      const {plan, macros, profile, eval:ev} = data;
+      const lines = [];
+      lines.push(`FitCoach Personalized Plan`);
+      lines.push(`Goal: ${profile.goal} | Level: ${ev.level} | Score: ${Math.round(ev.score)}`);
+      lines.push(`Days/week: ${profile.days_per_week} | Equipment: ${profile.equipment}`);
+      lines.push('');
+      plan.forEach(d=>{
+        lines.push(`${d.title} [${d.tags.join(' / ')}]`);
+        d.items.forEach((it,i)=> lines.push(`  - ${it.text}`));
+        lines.push('');
+      });
+      lines.push(`Nutrition: ${macros.kcal} kcal, Protein ${macros.protein} g, Carbs ${macros.carbs} g, Fat ${macros.fat} g`);
+      const blob = new Blob([lines.join('\n')], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'fitcoach-plan.txt'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---------- UI Wiring ----------
+    function updateUnitsUI(){
+      const isMetric = $('#units').value==='metric';
+      $$('.metric-only').forEach(el=> el.classList.toggle('hidden', !isMetric));
+      $$('.imperial-only').forEach(el=> el.classList.toggle('hidden', isMetric));
+      computeKpis();
+    }
+
+    function switchTab(id){
+      $$('.tab-panel').forEach(p=>p.classList.add('hidden'));
+      $(`#tab-${id}`).classList.remove('hidden');
+      $$('.tab-btn').forEach(b=> b.setAttribute('aria-selected', String(b.dataset.tab===id)) );
+    }
+
+    // Event listeners
+    $$('.tab-btn').forEach(b=> b.addEventListener('click', ()=> switchTab(b.dataset.tab)) );
+    $('#units').addEventListener('change', updateUnitsUI);
+    $$('#age,#sex,#height_cm,#weight_kg,#height_ft,#height_in,#weight_lb,#activity').forEach(el=> el.addEventListener('input', computeKpis));
+    $('#saveProfile').addEventListener('click', saveProfile);
+    $('#loadProfile').addEventListener('click', loadProfile);
+    $('#clearAll').addEventListener('click', clearAll);
+    $('#sampleData').addEventListener('click', sampleData);
+
+    $('#evaluate').addEventListener('click', evaluate);
+    $('#genPlan').addEventListener('click', generatePlan);
+    $('#exportPlan').addEventListener('click', exportPlan);
+    $('#printPlan').addEventListener('click', ()=> window.print());
+
+    // Init
+    loadProfile();
+  </script>
+</body>
+</html>
